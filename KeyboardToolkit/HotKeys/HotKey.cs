@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
+using KeyboardToolkit.Common;
 
 namespace KeyboardToolkit.HotKeys
 {

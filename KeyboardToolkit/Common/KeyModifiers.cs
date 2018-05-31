@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KeyboardToolkit.HotKeys
+namespace KeyboardToolkit.Common
 {
     [Flags]
     public enum KeyModifiers

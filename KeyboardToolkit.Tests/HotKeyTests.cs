@@ -1,8 +1,11 @@
-﻿using System.Threading;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Windows.Input;
+using KeyboardToolkit.Common;
 using KeyboardToolkit.HotKeys;
+using KeyboardToolkit.Receiver;
+using KeyboardToolkit.Sender;
 using NUnit.Framework;
+using KeyEventArgs = KeyboardToolkit.Common.KeyEventArgs;
 
 namespace KeyboardToolkit.Tests
 {
@@ -34,8 +37,8 @@ namespace KeyboardToolkit.Tests
 
             var toSend = new[]
             {
-                new KeyEventArgs(Key.A, KeyAction.KeyDown),
-                new KeyEventArgs(Key.A, KeyAction.KeyUp)
+                new KeyEventArgs(Key.A, Common.KeyState.KeyDown),
+                new KeyEventArgs(Key.A, Common.KeyState.KeyUp)
             };
 
             var actual = EventWaiter.WaitEvent(
@@ -61,8 +64,8 @@ namespace KeyboardToolkit.Tests
 
             var toSend = new[]
             {
-                new KeyEventArgs(Key.A, KeyAction.KeyDown),
-                new KeyEventArgs(Key.A, KeyAction.KeyUp)
+                new KeyEventArgs(Key.A, Common.KeyState.KeyDown),
+                new KeyEventArgs(Key.A, Common.KeyState.KeyUp)
             };
 
             var actual = EventWaiter.WaitEvent(
@@ -104,8 +107,8 @@ namespace KeyboardToolkit.Tests
 
             var toSend = new[]
             {
-                new KeyEventArgs(Key.A, KeyAction.KeyDown),
-                new KeyEventArgs(Key.A, KeyAction.KeyUp)
+                new KeyEventArgs(Key.A, Common.KeyState.KeyDown),
+                new KeyEventArgs(Key.A, Common.KeyState.KeyUp)
             };
 
             var actual = EventWaiter.WaitEvent(

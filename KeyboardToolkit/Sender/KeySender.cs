@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
+using KeyboardToolkit.Common;
 using PInvoke;
 
-namespace KeyboardToolkit
+namespace KeyboardToolkit.Sender
 {
     public class KeySender : IKeySender
     {
@@ -18,7 +19,7 @@ namespace KeyboardToolkit
                 {
                     ki = new User32.KEYBDINPUT
                     {
-                        dwFlags = arg.KeyAction == KeyAction.KeyUp
+                        dwFlags = arg.KeyState == Common.KeyState.KeyUp
                             ? User32.KEYEVENTF.KEYEVENTF_KEYUP
                             : 0,
                         wVk = (User32.VirtualKey) KeyInterop.VirtualKeyFromKey(arg.Key)

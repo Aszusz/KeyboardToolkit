@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
+using KeyboardToolkit.Common;
+using KeyboardToolkit.Receiver;
+using KeyboardToolkit.Sender;
 using NUnit.Framework;
 
 namespace KeyboardToolkit.Tests
@@ -15,8 +18,8 @@ namespace KeyboardToolkit.Tests
         {
             var expected = new List<KeyEventArgs>
             {
-                new KeyEventArgs(Key.P, KeyAction.KeyDown),
-                new KeyEventArgs(Key.P, KeyAction.KeyUp)
+                new KeyEventArgs(Key.P, Common.KeyState.KeyDown),
+                new KeyEventArgs(Key.P, Common.KeyState.KeyUp)
             };
 
             var actual = EventWaiter.WaitEvent<KeyEventArgs>(
@@ -33,8 +36,8 @@ namespace KeyboardToolkit.Tests
         {
             var expected = new List<KeyEventArgs>
             {
-                new KeyEventArgs(Key.P, KeyAction.KeyDown),
-                new KeyEventArgs(Key.P, KeyAction.KeyUp)
+                new KeyEventArgs(Key.P, Common.KeyState.KeyDown),
+                new KeyEventArgs(Key.P, Common.KeyState.KeyUp)
             };
 
             _receiver.Uninstall();
@@ -54,8 +57,8 @@ namespace KeyboardToolkit.Tests
         {
             var toSend = new List<KeyEventArgs>
             {
-                new KeyEventArgs(Key.P, KeyAction.KeyDown),
-                new KeyEventArgs(Key.P, KeyAction.KeyUp)
+                new KeyEventArgs(Key.P, Common.KeyState.KeyDown),
+                new KeyEventArgs(Key.P, Common.KeyState.KeyUp)
             };
 
             _receiver.Uninstall();

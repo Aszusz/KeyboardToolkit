@@ -1,6 +1,7 @@
 ﻿using System;
+using KeyboardToolkit.Common;
 
-namespace KeyboardToolkit
+namespace KeyboardToolkit.Receiver
 {
     public interface IKeyReceiver
     {

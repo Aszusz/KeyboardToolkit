@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using KeyboardToolkit.Common;
 
-namespace KeyboardToolkit
+namespace KeyboardToolkit.Sender
 {
     public interface IKeySender
     {

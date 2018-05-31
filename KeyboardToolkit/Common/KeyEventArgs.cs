@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace KeyboardToolkit
+namespace KeyboardToolkit.Common
 {
     public class KeyEventArgs : EventArgs, IEquatable<KeyEventArgs>
     {
-        public KeyEventArgs(Key key, KeyAction keyAction)
+        public KeyEventArgs(Key key, KeyState keyState)
         {
-            KeyAction = keyAction;
+            KeyState = keyState;
             Key = key;
         }
 
         public Key Key { get; }
 
-        public KeyAction KeyAction { get; }
+        public KeyState KeyState { get; }
 
         public static bool operator ==(KeyEventArgs left, KeyEventArgs right)
         {
@@ -29,7 +29,7 @@ namespace KeyboardToolkit
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Key == other.Key && KeyAction == other.KeyAction;
+            return Key == other.Key && KeyState == other.KeyState;
         }
 
         public override bool Equals(object obj)
@@ -44,7 +44,7 @@ namespace KeyboardToolkit
         {
             unchecked
             {
-                return ((int) Key*397) ^ (int) KeyAction;
+                return ((int) Key*397) ^ (int) KeyState;
             }
         }
     }

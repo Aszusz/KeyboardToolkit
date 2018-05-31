@@ -2,9 +2,10 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
+using KeyboardToolkit.Common;
 using PInvoke;
 
-namespace KeyboardToolkit
+namespace KeyboardToolkit.Receiver
 {
     public class KeyReceiver : IDisposable, IKeyReceiver
     {
@@ -70,7 +71,7 @@ namespace KeyboardToolkit
                 {
                     var code = Marshal.ReadInt32(lParam);
                     var key = KeyInterop.KeyFromVirtualKey(code);
-                    RaiseKeyEvent(new KeyEventArgs(key, KeyAction.KeyDown));
+                    RaiseKeyEvent(new KeyEventArgs(key, Common.KeyState.KeyDown));
                 }
             }
             else if (iwParam == (uint) User32.WindowMessage.WM_KEYUP ||
@@ -79,7 +80,7 @@ namespace KeyboardToolkit
                 {
                     var code = Marshal.ReadInt32(lParam);
                     var key = KeyInterop.KeyFromVirtualKey(code);
-                    RaiseKeyEvent(new KeyEventArgs(key, KeyAction.KeyUp));
+                    RaiseKeyEvent(new KeyEventArgs(key, Common.KeyState.KeyUp));
                 }
             }
 

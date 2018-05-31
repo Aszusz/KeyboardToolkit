@@ -1,9 +1,9 @@
 using System;
 using System.Windows.Forms;
 
-namespace KeyboardToolkit.HotKeys
+namespace KeyboardToolkit.Common
 {
-    public class HotKeyEventArgs : EventArgs
+    internal class HotKeyEventArgs : EventArgs
     {
         public readonly int Id;
         public readonly Keys Key;

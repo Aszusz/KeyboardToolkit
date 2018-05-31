@@ -57,18 +57,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HotKeys\HotKey.cs" />
-    <Compile Include="HotKeys\HotKeyEventArgs.cs" />
+    <Compile Include="Common\HotKeyEventArgs.cs" />
     <Compile Include="HotKeys\HotKeyInteropMethods.cs" />
     <Compile Include="HotKeys\HotKeyManager.cs" />
-    <Compile Include="HotKeys\IHotKey.cs" />
-    <Compile Include="HotKeys\KeyModifiers.cs" />
+    <Compile Include="IHotKey.cs" />
+    <Compile Include="Common\KeyModifiers.cs" />
     <Compile Include="IKeyReceiver.cs" />
     <Compile Include="IKeySender.cs" />
-    <Compile Include="IndexedObjectPool.cs" />
-    <Compile Include="KeyAction.cs" />
-    <Compile Include="KeyEventArgs.cs" />
-    <Compile Include="KeyReceiver.cs" />
-    <Compile Include="KeySender.cs" />
+    <Compile Include="Common\KeyState.cs" />
+    <Compile Include="Common\KeyEventArgs.cs" />
+    <Compile Include="KeyReceiver\KeyReceiver.cs" />
+    <Compile Include="KeySender\KeySender.cs" />
+    <Compile Include="IKeyStateMonitor.cs" />
+    <Compile Include="KeyStateMonitor\KeyStateMonitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
