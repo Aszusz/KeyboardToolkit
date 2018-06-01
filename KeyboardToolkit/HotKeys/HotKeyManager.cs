@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Input;
 using KeyboardToolkit.Common;
 
 namespace KeyboardToolkit.HotKeys
@@ -27,10 +28,11 @@ namespace KeyboardToolkit.HotKeys
 
         internal static event EventHandler<HotKeyEventArgs> HotKeyPressed;
 
-        internal static void RegisterHotKey(Keys key, KeyModifiers modifiers, int id)
+        internal static void RegisterHotKey(Key key, ModifierKeys modifiers, int id)
         {
+            var virtualKeyCode = KeyInterop.VirtualKeyFromKey(key);
             WindowReadyEvent.WaitOne();
-            _wnd.Invoke(new RegisterHotKeyDelegate(RegisterHotKeyInternal), _hwnd, id, (uint) modifiers, (uint) key);
+            _wnd.Invoke(new RegisterHotKeyDelegate(RegisterHotKeyInternal), _hwnd, id, (uint) modifiers, (uint) virtualKeyCode);
         }
 
         internal static void UnregisterHotKey(int id)

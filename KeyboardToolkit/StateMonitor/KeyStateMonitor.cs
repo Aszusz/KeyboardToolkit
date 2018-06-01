@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using KeyboardToolkit.Common;
-using PInvoke;
+using KeyboardToolkit.Interops.Enums;
+using KeyboardToolkit.Interops.Methods;
 
 namespace KeyboardToolkit.StateMonitor
 {
@@ -9,7 +10,7 @@ namespace KeyboardToolkit.StateMonitor
         public KeyState GetKeyState(Key key)
         {
             var virtualKeyCode = KeyInterop.VirtualKeyFromKey(key);
-            return (ushort) User32.GetKeyState(virtualKeyCode) >> 15 == 1
+            return (ushort) GetKeyStateInterop.GetKeyState((VIRTUAL_KEY_CODE) virtualKeyCode) >> 15 == 1
                 ? KeyState.KeyDown
                 : KeyState.KeyUp;
         }

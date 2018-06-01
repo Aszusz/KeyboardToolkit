@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Windows.Input;
 using KeyboardToolkit.Common;
 
@@ -20,7 +19,7 @@ namespace KeyboardToolkit.HotKeys
             Lock = new object();
         }
 
-        private HotKey(Keys key, KeyModifiers modifiers, int id)
+        private HotKey(Key key, ModifierKeys modifiers, int id)
         {
             Key = key;
             Modifiers = modifiers;
@@ -31,17 +30,11 @@ namespace KeyboardToolkit.HotKeys
 
         public int Id { get; }
 
-        public Keys Key { get; }
+        public Key Key { get; }
 
-        public KeyModifiers Modifiers { get; }
+        public ModifierKeys Modifiers { get; }
 
         public static IHotKey Create(Key key, ModifierKeys modifiers)
-        {
-            var virtualKeyCode = KeyInterop.VirtualKeyFromKey(key);
-            return Create((Keys) virtualKeyCode, (KeyModifiers) modifiers);
-        }
-
-        public static IHotKey Create(Keys key, KeyModifiers modifiers)
         {
             lock (Lock)
             {

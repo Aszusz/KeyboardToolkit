@@ -1,6 +1,5 @@
 using System;
-using System.Windows.Forms;
-using KeyboardToolkit.Common;
+using System.Windows.Input;
 
 namespace KeyboardToolkit.HotKeys
 {
@@ -8,8 +7,8 @@ namespace KeyboardToolkit.HotKeys
     {
         event Action Pressed;
         int Id { get; }
-        Keys Key { get; }
-        KeyModifiers Modifiers { get; }
+        Key Key { get; }
+        ModifierKeys Modifiers { get; }
         void Register();
         void Unregister();
         void Dispose();

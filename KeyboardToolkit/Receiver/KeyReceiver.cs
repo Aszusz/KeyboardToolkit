@@ -3,13 +3,15 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 using KeyboardToolkit.Common;
-using PInvoke;
+using KeyboardToolkit.Interops.Constants;
+using KeyboardToolkit.Interops.Methods;
 
 namespace KeyboardToolkit.Receiver
 {
     public class KeyReceiver : IDisposable, IKeyReceiver
     {
-        private User32.SafeHookHandle _hookId = User32.SafeHookHandle.Null;
+        private const int WH_KEYBOARD_LL = 13;
+        private IntPtr _hookId = IntPtr.Zero;
         public event EventHandler<KeyEventArgs> KeyReceived;
 
         public void Dispose()
@@ -20,23 +22,28 @@ namespace KeyboardToolkit.Receiver
 
         public void Install()
         {
-            if(_hookId != User32.SafeHookHandle.Null) return;
+            if (_hookId != IntPtr.Zero) return;
             _hookId = SetHook(HookFunc);
         }
 
         public void Uninstall()
         {
-            if (_hookId == User32.SafeHookHandle.Null) return;
-            _hookId.Close();
-            _hookId = User32.SafeHookHandle.Null;
+            if (_hookId == IntPtr.Zero) return;
+            WindowsHookExInterop.UnhookWindowsHookEx(_hookId);
+            _hookId = IntPtr.Zero;
         }
 
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _hookId.Dispose();
+                Uninstall();
             }
+        }
+
+        ~KeyReceiver()
+        {
+            Dispose(false);
         }
 
         protected virtual void RaiseKeyEvent(KeyEventArgs args)
@@ -44,47 +51,47 @@ namespace KeyboardToolkit.Receiver
             KeyReceived?.Invoke(this, args);
         }
 
-        private static User32.SafeHookHandle SetHook(User32.WindowsHookDelegate windowsHookDelegate)
+        private static IntPtr SetHook(WindowsHookExInterop.KeyboardHook windowsHookDelegate)
         {
             using (var module = Process.GetCurrentProcess().MainModule)
             {
-                return User32.SetWindowsHookEx(
-                    User32.WindowsHookType.WH_KEYBOARD_LL,
+                return WindowsHookExInterop.SetWindowsHookEx(
+                    WH_KEYBOARD_LL,
                     windowsHookDelegate,
-                    Kernel32.GetModuleHandle(module.ModuleName).DangerousGetHandle(),
+                    GetModuleHandleInterop.GetModuleHandle(module.ModuleName),
                     0);
             }
         }
 
-        private int HookFunc(int nCode, IntPtr wParam, IntPtr lParam)
+        private IntPtr HookFunc(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode < 0)
             {
-                return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+                return WindowsHookExInterop.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
             }
 
             var iwParam = wParam.ToInt32();
 
-            if (iwParam == (uint) User32.WindowMessage.WM_KEYDOWN ||
-                iwParam == (uint) User32.WindowMessage.WM_SYSKEYDOWN)
+            if (iwParam == (uint) WINDOW_MESSAGE.WM_KEYDOWN ||
+                iwParam == (uint) WINDOW_MESSAGE.WM_SYSKEYDOWN)
             {
                 {
                     var code = Marshal.ReadInt32(lParam);
                     var key = KeyInterop.KeyFromVirtualKey(code);
-                    RaiseKeyEvent(new KeyEventArgs(key, Common.KeyState.KeyDown));
+                    RaiseKeyEvent(new KeyEventArgs(key, KeyState.KeyDown));
                 }
             }
-            else if (iwParam == (uint) User32.WindowMessage.WM_KEYUP ||
-                     iwParam == (uint) User32.WindowMessage.WM_SYSKEYUP)
+            else if (iwParam == (uint) WINDOW_MESSAGE.WM_KEYUP ||
+                     iwParam == (uint) WINDOW_MESSAGE.WM_SYSKEYUP)
             {
                 {
                     var code = Marshal.ReadInt32(lParam);
                     var key = KeyInterop.KeyFromVirtualKey(code);
-                    RaiseKeyEvent(new KeyEventArgs(key, Common.KeyState.KeyUp));
+                    RaiseKeyEvent(new KeyEventArgs(key, KeyState.KeyUp));
                 }
             }
 
-            return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+            return WindowsHookExInterop.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
         }
     }
 }

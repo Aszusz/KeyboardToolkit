@@ -18,8 +18,8 @@ namespace KeyboardToolkit.Tests
         {
             var expected = new List<KeyEventArgs>
             {
-                new KeyEventArgs(Key.P, Common.KeyState.KeyDown),
-                new KeyEventArgs(Key.P, Common.KeyState.KeyUp)
+                new KeyEventArgs(Key.Escape, KeyState.KeyDown),
+                new KeyEventArgs(Key.Escape, KeyState.KeyUp)
             };
 
             var actual = EventWaiter.WaitEvent<KeyEventArgs>(
@@ -36,8 +36,8 @@ namespace KeyboardToolkit.Tests
         {
             var expected = new List<KeyEventArgs>
             {
-                new KeyEventArgs(Key.P, Common.KeyState.KeyDown),
-                new KeyEventArgs(Key.P, Common.KeyState.KeyUp)
+                new KeyEventArgs(Key.Escape, KeyState.KeyDown),
+                new KeyEventArgs(Key.Escape, KeyState.KeyUp)
             };
 
             _receiver.Uninstall();
@@ -57,8 +57,8 @@ namespace KeyboardToolkit.Tests
         {
             var toSend = new List<KeyEventArgs>
             {
-                new KeyEventArgs(Key.P, Common.KeyState.KeyDown),
-                new KeyEventArgs(Key.P, Common.KeyState.KeyUp)
+                new KeyEventArgs(Key.Escape, KeyState.KeyDown),
+                new KeyEventArgs(Key.Escape, KeyState.KeyUp)
             };
 
             _receiver.Uninstall();

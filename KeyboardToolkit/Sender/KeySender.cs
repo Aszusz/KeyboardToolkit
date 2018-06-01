@@ -4,7 +4,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 using KeyboardToolkit.Common;
-using PInvoke;
+using KeyboardToolkit.Interops.Enums;
+using KeyboardToolkit.Interops.Methods;
+using KeyboardToolkit.Interops.Structs;
 
 namespace KeyboardToolkit.Sender
 {
@@ -12,23 +14,23 @@ namespace KeyboardToolkit.Sender
     {
         public void Send(IEnumerable<KeyEventArgs> sequence)
         {
-            var inputs = sequence.Select(arg => new User32.INPUT
+            var inputs = sequence.Select(arg => new INPUT
             {
-                type = User32.InputType.INPUT_KEYBOARD,
-                Inputs = new User32.INPUT.InputUnion
+                type = INPUT_TYPE.INPUT_KEYBOARD,
+                U = new INPUT_UNION
                 {
-                    ki = new User32.KEYBDINPUT
+                    ki = new KEYBDINPUT
                     {
-                        dwFlags = arg.KeyState == Common.KeyState.KeyUp
-                            ? User32.KEYEVENTF.KEYEVENTF_KEYUP
+                        dwFlags = arg.KeyState == KeyState.KeyUp
+                            ? KEYEVENTF.KEYUP
                             : 0,
-                        wVk = (User32.VirtualKey) KeyInterop.VirtualKeyFromKey(arg.Key)
+                        wVk = (VIRTUAL_KEY_CODE) KeyInterop.VirtualKeyFromKey(arg.Key)
                     }
                 }
             }).ToArray();
 
             var size = Marshal.SizeOf(inputs[0]);
-            var result = User32.SendInput(inputs.Length, inputs, size);
+            var result = SendInputInterop.SendInput((uint) inputs.Length, inputs, size);
             if (result != inputs.Length)
             {
                 throw new InvalidOperationException();

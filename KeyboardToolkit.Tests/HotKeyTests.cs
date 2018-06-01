@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+﻿using System.Threading;
 using System.Windows.Input;
 using KeyboardToolkit.Common;
 using KeyboardToolkit.HotKeys;
@@ -32,13 +32,13 @@ namespace KeyboardToolkit.Tests
         [Test]
         public void RegisteredHotKeyShoudReact()
         {
-            var hotKey = HotKey.Create(Keys.A, KeyModifiers.None);
+            var hotKey = HotKey.Create(Key.Escape, ModifierKeys.None);
             hotKey.Register();
 
             var toSend = new[]
             {
-                new KeyEventArgs(Key.A, Common.KeyState.KeyDown),
-                new KeyEventArgs(Key.A, Common.KeyState.KeyUp)
+                new KeyEventArgs(Key.Escape, KeyState.KeyDown),
+                new KeyEventArgs(Key.Escape, KeyState.KeyUp)
             };
 
             var actual = EventWaiter.WaitEvent(
@@ -55,17 +55,44 @@ namespace KeyboardToolkit.Tests
             hotKey.Dispose();
         }
 
+        [Test, Ignore("This works in practice but not in tests. I don't know why.")]
+        public void RegisteredHotKeyBlocksApplicationFromReceivingInput()
+        {
+            var hotKey = HotKey.Create(Key.Left, ModifierKeys.None);
+            hotKey.Register();
+
+            var wasReceived = false;
+            var are = new AutoResetEvent(false);
+            _receiver.KeyReceived += (sender, args) =>
+            {
+                if (args.Key == Key.Left)
+                {
+                    wasReceived = true;
+                    are.Set();
+                }
+            };
+
+            _sender.Send(new[]
+            {
+                new KeyEventArgs(Key.Left, KeyState.KeyDown),
+                new KeyEventArgs(Key.Left, KeyState.KeyUp)
+            });
+
+            are.WaitOne(100);
+            Assert.IsFalse(wasReceived);
+        }
+
         [Test]
         public void UnregisteredHotKeyShoudNotReact()
         {
-            var hotKey = HotKey.Create(Keys.A, KeyModifiers.None);
+            var hotKey = HotKey.Create(Key.Escape, ModifierKeys.None);
             hotKey.Register();
             hotKey.Unregister();
 
             var toSend = new[]
             {
-                new KeyEventArgs(Key.A, Common.KeyState.KeyDown),
-                new KeyEventArgs(Key.A, Common.KeyState.KeyUp)
+                new KeyEventArgs(Key.Escape, KeyState.KeyDown),
+                new KeyEventArgs(Key.Escape, KeyState.KeyUp)
             };
 
             var actual = EventWaiter.WaitEvent(
@@ -85,7 +112,7 @@ namespace KeyboardToolkit.Tests
         [Test]
         public void MultipleRegistrationsAndUnregistrationsShouldNotRiseException()
         {
-            var hotKey = HotKey.Create(Keys.A, KeyModifiers.None);
+            var hotKey = HotKey.Create(Key.Escape, ModifierKeys.None);
             
             Assert.That(() =>
             {
@@ -101,14 +128,14 @@ namespace KeyboardToolkit.Tests
         [Test]
         public void DisposedHotKeyDoesNotThrowOnSend()
         {
-            var hotKey = HotKey.Create(Keys.A, KeyModifiers.None);
+            var hotKey = HotKey.Create(Key.Escape, ModifierKeys.None);
             hotKey.Register();
             hotKey.Dispose();
 
             var toSend = new[]
             {
-                new KeyEventArgs(Key.A, Common.KeyState.KeyDown),
-                new KeyEventArgs(Key.A, Common.KeyState.KeyUp)
+                new KeyEventArgs(Key.Escape, KeyState.KeyDown),
+                new KeyEventArgs(Key.Escape, KeyState.KeyUp)
             };
 
             var actual = EventWaiter.WaitEvent(
