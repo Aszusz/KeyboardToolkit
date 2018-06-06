@@ -12,6 +12,7 @@ namespace KeyboardToolkit.Receiver
     {
         private const int WH_KEYBOARD_LL = 13;
         private IntPtr _hookId = IntPtr.Zero;
+        private WindowsHookExInterop.KeyboardHook _keyboardHookDelegate;
         public event EventHandler<KeyEventArgs> KeyReceived;
 
         public void Dispose()
@@ -23,13 +24,15 @@ namespace KeyboardToolkit.Receiver
         public void Install()
         {
             if (_hookId != IntPtr.Zero) return;
-            _hookId = SetHook(HookFunc);
+            _keyboardHookDelegate = HookFunc;
+            _hookId = SetHook(_keyboardHookDelegate);
         }
 
         public void Uninstall()
         {
             if (_hookId == IntPtr.Zero) return;
             WindowsHookExInterop.UnhookWindowsHookEx(_hookId);
+            _keyboardHookDelegate = null;
             _hookId = IntPtr.Zero;
         }
 
